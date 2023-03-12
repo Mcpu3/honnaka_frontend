@@ -128,10 +128,56 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useState, useEffect } from "react";
+import { TextField } from "@mui/material";
+import axios from "axios";
+interface LoginResponse {
+  token: string;
+  user: {
+    id: string;
+    user_name: string;
+    password: string;
+  };
+}
 
-export default function ImgMediaCard() {
+interface LoginRequest {
+  user_name: string;
+  password: string;
+}
+
+interface SignupRequest {
+  user_name: string;
+  password: string;
+}
+const login = async (request: LoginRequest): Promise<LoginResponse> => {
+  const response = await axios.post<LoginResponse>("/api/login", request);
+  return response.data;
+};
+
+const signup = async (request: SignupRequest): Promise<LoginResponse> => {
+  const response = await axios.post<LoginResponse>("/api/signup", request);
+  return response.data;
+};
+
+const SignupAndLogin = () => {
+  const [user_name, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<LoginResponse["user"] | null>(null);
+
+  const handleSignupAndLogin = async () => {
+    const { token, user } = await signup({ user_name, password });
+    setToken(token);
+    setUser(user);
+  };
+  const handleLogin = async () => {
+    const { token, user } = await login({ user_name, password });
+    setToken(token);
+    setUser(user);
+  };
+
   return (
-    <Card sx={{ maxWidth: 450, zIndex: "tooltip" }}>
+    <Card sx={{ maxWidth: 450 }}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           Hukyousns
@@ -139,15 +185,18 @@ export default function ImgMediaCard() {
         <Typography variant="body2" color="text.secondary">
           Welcome to Hukyousns! Let's enjoy this sns !
         </Typography>
-        <Typography className="mt-1">UserName</Typography>
-        <input className="border-2"></input>
-        <Typography className="mt-1">Password</Typography>
-        <input className="border-2"></input>
       </CardContent>
       <CardActions>
-        <Button size="small">Login</Button>
+        <Button size="small" href="./components/signup">
+          Signup
+        </Button>
+        <Button size="small" href="./components/signin">
+          Signin
+        </Button>
         <Button size="small">Logout</Button>
       </CardActions>
     </Card>
   );
-}
+};
+
+export default SignupAndLogin;
