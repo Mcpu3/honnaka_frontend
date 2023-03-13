@@ -152,7 +152,8 @@ const SignupAndLogin = () => {
     try {
       const response = await axios.post(endpointUrl, params);
       console.log("Success:", response);
-      console.log(response.data);
+      console.log(response.data.access_token);
+      localStorage.setItem("access_token", response.data.access_token);
     } catch (error) {
       console.error("Error:", error);
     }
