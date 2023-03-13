@@ -1,14 +1,27 @@
 import { PhotoCamera } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
+import { Url } from "next/dist/shared/lib/router/router";
+import Router from "next/router";
 import React from "react";
 import Header from "./header";
 
 const homePage = () => {
+  const handler = (path: Url) => {
+    Router.push(path);
+  };
   return (
     <div>
       <Header />
       <Button variant="contained" component="label" color="inherit">
         Shuffle!!
+      </Button>
+      <Button
+        variant="contained"
+        component="label"
+        color="inherit"
+        onClick={() => handler("./MyPage")}
+      >
+        Mypage
       </Button>
     </div>
   );
