@@ -11,7 +11,6 @@ import axios from "axios";
 interface LoginResponse {
   token: string;
   user: {
-    id: string;
     user_name: string;
     password: string;
   };
@@ -27,12 +26,18 @@ interface SignupRequest {
   password: string;
 }
 const login = async (request: LoginRequest): Promise<LoginResponse> => {
-  const response = await axios.post<LoginResponse>("/api/login", request);
+  const response = await axios.post<LoginResponse>(
+    "https://honnaka-backend.azurewebsites.net/api/login",
+    request
+  );
   return response.data;
 };
 
 const signup = async (request: SignupRequest): Promise<LoginResponse> => {
-  const response = await axios.post<LoginResponse>("/api/signup", request);
+  const response = await axios.post<LoginResponse>(
+    "https://honnaka-backend.azurewebsites.net/api/signup",
+    request
+  );
   return response.data;
 };
 
@@ -41,16 +46,37 @@ const SignupAndLogin = () => {
   const [password, setPassword] = useState<string>("");
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<LoginResponse["user"] | null>(null);
+  const endpointUrl = "https://honnaka-backend.azurewebsites.net/api/v1/signup";
 
-  const handleSignupAndLogin = async () => {
-    const { token, user } = await signup({ user_name, password });
-    setToken(token);
-    setUser(user);
-  };
-  const handleLogin = async () => {
-    const { token, user } = await login({ user_name, password });
-    setToken(token);
-    setUser(user);
+  // const handleSignupAndLogin = async () => {
+  //   const response = await fetch(
+  //     "https://honnaka-backend.azurewebsites.net/docs#/api/signup",
+  //     {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ username, password }),
+  //     }
+  //   );
+  //   const data = await response.json();
+  //   console.log(data);
+  //   return data;
+  // };
+
+  const handleCheck = async () => {
+    const requestData = {
+      user_name: "testuser",
+      password: "testpassword",
+    };
+
+    // POSTリクエストを送信
+    axios
+      .post(endpointUrl, requestData)
+      .then((response) => {
+        console.log("Success:", response);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -80,7 +106,9 @@ const SignupAndLogin = () => {
         ></TextField>
       </CardContent>
       <CardActions>
-        <Button size="small">Signup</Button>
+        <Button size="small" onClick={handleCheck}>
+          Signup
+        </Button>
         <Button size="small">Logout</Button>
       </CardActions>
     </Card>

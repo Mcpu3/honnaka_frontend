@@ -23,7 +23,7 @@ interface LoginRequest {
 }
 
 const login = async (request: LoginRequest): Promise<LoginResponse> => {
-  const response = await axios.post<LoginResponse>("/api/login", request);
+  const response = await axios.post<LoginResponse>("/api/v1/signin", request);
   return response.data;
 };
 
