@@ -131,6 +131,8 @@ import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import axios from "axios";
+import Header from "./components/header";
+
 interface LoginResponse {
   token: string;
   user: {
@@ -175,27 +177,40 @@ const SignupAndLogin = () => {
     setToken(token);
     setUser(user);
   };
+  const styles = {
+    cardContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+    },
+  };
 
   return (
-    <Card sx={{ maxWidth: 450 }}>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Hukyousns
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Welcome to Hukyousns! Let&apos;s enjoy this sns !
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" href="./components/signup">
-          Signup
-        </Button>
-        <Button size="small" href="./components/signin">
-          Signin
-        </Button>
-        <Button size="small">Logout</Button>
-      </CardActions>
-    </Card>
+    <div>
+      <Header />
+      <div style={styles.cardContainer}>
+        <Card sx={{ maxWidth: 450 }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              Hukyousns
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Welcome to Hukyousns! Let&apos;s enjoy this sns !
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small" href="./components/signup">
+              Signup
+            </Button>
+            <Button size="small" href="./components/signin">
+              Signin
+            </Button>
+            <Button size="small">Logout</Button>
+          </CardActions>
+        </Card>
+      </div>
+    </div>
   );
 };
 

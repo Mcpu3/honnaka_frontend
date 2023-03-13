@@ -110,6 +110,7 @@ import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import axios, { AxiosError } from "axios";
+import Header from "./header";
 
 interface LoginResponse {
   token: string;
@@ -135,6 +136,15 @@ const login = async (request: LoginRequest): Promise<LoginResponse> => {
     request
   );
   return response.data;
+};
+
+const styles = {
+  cardContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+  },
 };
 
 const signup = async (request: SignupRequest): Promise<LoginResponse> => {
@@ -167,36 +177,41 @@ const SignupAndLogin = () => {
   };
 
   return (
-    <Card sx={{ maxWidth: 450 }}>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Hukyousns
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Welcome to Hukyousns! Let&apos;s enjoy this sns !
-        </Typography>
-        <Typography className="mt-1">UserName</Typography>
-        <input
-          value={user_name}
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
-        ></input>
-        <Typography className="mt-1">Password</Typography>
-        <input
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        ></input>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={handleCheck}>
-          Signup
-        </Button>
-        <Button size="small">Logout</Button>
-      </CardActions>
-    </Card>
+    <div>
+      <Header />
+      <div style={styles.cardContainer}>
+        <Card sx={{ maxWidth: 450 }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              Hukyousns
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Welcome to Hukyousns! Let&apos;s enjoy this sns !
+            </Typography>
+            <Typography className="mt-1">UserName</Typography>
+            <input
+              value={user_name}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+            ></input>
+            <Typography className="mt-1">Password</Typography>
+            <input
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            ></input>
+          </CardContent>
+          <CardActions>
+            <Button size="small" onClick={handleCheck}>
+              Signup
+            </Button>
+            <Button size="small">Logout</Button>
+          </CardActions>
+        </Card>
+      </div>
+    </div>
   );
 };
 
