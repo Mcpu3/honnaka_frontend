@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && rm -rf ./.next/cache/",
+    "build": "next build && rm -rf ./.next/cache && rm -rf ./node_modules/@next/swc-*",
     "start": "next start",
     "lint": "next lint"
   },
