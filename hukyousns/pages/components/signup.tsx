@@ -27,7 +27,7 @@ interface SignupRequest {
 }
 const login = async (request: LoginRequest): Promise<LoginResponse> => {
   const response = await axios.post<LoginResponse>(
-    "https://honnaka-backend.azurewebsites.net/api/login",
+    "https://honnaka-backend.azurewebsites.net/api/signin",
     request
   );
   return response.data;
@@ -90,19 +90,19 @@ const SignupAndLogin = () => {
         </Typography>
         <Typography className="mt-1">UserName</Typography>
         <TextField
-          variant="standard"
-          value={user_name}
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
+        // variant="standard"
+        // value={user_name}
+        // onChange={(e) => {
+        //   setUsername(e.target.value);
+        // }}
         ></TextField>
         <Typography className="mt-1">Password</Typography>
         <TextField
-          variant="standard"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
+        // variant="standard"
+        // value={password}
+        // onChange={(e) => {
+        //   setPassword(e.target.value);
+        // }}
         ></TextField>
       </CardContent>
       <CardActions>
