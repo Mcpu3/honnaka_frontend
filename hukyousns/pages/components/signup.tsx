@@ -173,7 +173,7 @@ const SignupAndLogin = () => {
           Hukyousns
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Welcome to Hukyousns! Let's enjoy this sns !
+          Welcome to Hukyousns! Let&apos;s enjoy this sns !
         </Typography>
         <Typography className="mt-1">UserName</Typography>
         <input
