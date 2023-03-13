@@ -89,6 +89,8 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import Header from "./header";
+import { Url } from "next/dist/shared/lib/router/router";
+import Router from "next/router";
 
 interface LoginResponse {
   token: string;
@@ -131,6 +133,9 @@ const styles = {
 //   );
 //   return response.data;
 // };
+const handler = (path: Url) => {
+  Router.push(path);
+};
 
 const SignupAndLogin = () => {
   const [user_name, setUsername] = useState<string>("");
@@ -164,6 +169,7 @@ const SignupAndLogin = () => {
       console.log(response.data.access_token);
 
       localStorage.setItem("access_token", response.data.access_token);
+      handler("./homePage");
     } catch (error) {
       console.error("Error:", error);
     }

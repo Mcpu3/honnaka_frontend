@@ -111,6 +111,8 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import Header from "./header";
+import Router from "next/router";
+import { Url } from "next/dist/shared/lib/router/router";
 
 interface LoginResponse {
   token: string;
@@ -154,6 +156,9 @@ const signup = async (request: SignupRequest): Promise<LoginResponse> => {
   );
   return response.data;
 };
+const handler = (path: Url) => {
+  Router.push(path);
+};
 
 const SignupAndLogin = () => {
   const [user_name, setUsername] = useState<string>("");
@@ -171,6 +176,7 @@ const SignupAndLogin = () => {
     try {
       const response = await axios.post(endpointUrl, requestData);
       console.log("Success:", response);
+      handler("./signin");
     } catch (error) {
       console.error("Error:", error);
     }
