@@ -30,6 +30,7 @@ jobs:
           app_location: "/hukyousns" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
+          api_build_command: "rm -rf $SOURCE_DIR/.next/cache && rm -rf $SOURCE_DIR/node_modules/@next/swc-*"
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
