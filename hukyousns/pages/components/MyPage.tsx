@@ -2,24 +2,27 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 interface User {
-  username: string;
-  password: string;
+  user_uuid: "string";
+  user_name: "string";
+  display_name: "string";
+  created_at: "string";
+  updated_at: "string";
 }
+const API_ENDPOINT = "https://honnaka-backend.azurewebsites.net/api/v1/me";
 
-interface MyPageResponse {
-  user: User;
-  posts: Post[];
-}
-
-interface Post {
-  title: string;
-  content: string;
+async function getUserInfo(): Promise<User> {
+  const accessToken = localStorage.getItem("access_token");
+  const response = await axios.get(API_ENDPOINT, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
 }
 
 const MyPage = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [posts, setPosts] = useState<Post[]>([]);
-
+  const [username, setUsername] = useState<string>("");
+  const [myUser, setMyUser] = useState<User | null>(null);
   useEffect(() => {
     const fetchMyPageData = async () => {
       try {
@@ -31,16 +34,10 @@ const MyPage = () => {
           return;
         }
 
-        const response = await axios.get<MyPageResponse>(
-          "https://honnaka-backend.azurewebsites.net/api/v1/mypage",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setUser(response.data.user);
-        setPosts(response.data.posts);
+        getUserInfo().then((user) => {
+          setMyUser(user);
+          console.log(myUser); // ユーザー情報をコンソールに出力する
+        });
       } catch (error) {
         console.error("Error:", error);
       }
@@ -48,7 +45,7 @@ const MyPage = () => {
     fetchMyPageData();
   }, []);
 
-  if (!user) {
+  if (!myUser) {
     return <div>Loading...</div>;
   }
 
@@ -56,10 +53,9 @@ const MyPage = () => {
     <div>
       <h1>My Page</h1>
       <div>
-        <h2>{user.username}</h2>
-        <p>{user.password}</p>
+        <h2>{myUser.user_name}</h2>
       </div>
-      <div>
+      {/* <div>
         <h2>My Posts</h2>
         <ul>
           {posts.map((post) => (
@@ -69,7 +65,7 @@ const MyPage = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
