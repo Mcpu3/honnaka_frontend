@@ -7,6 +7,7 @@ import Header from "./header";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
@@ -99,6 +100,7 @@ const home = () => {
   const [location, setLocation] = useState<Location | undefined>(undefined);
   const [reaction, setReaction] = useState<Reaction | undefined>(undefined);
   const [reactions, setReactions] = useState<Reactions | undefined>(undefined);
+  const [image, setImage] = useState<Image | undefined>(undefined);
 
   const handler = (url: Url) => {
     Router.push(url);
@@ -226,6 +228,39 @@ const home = () => {
   useEffect(() => {
     let ignore = false;
 
+    const fetchImage = async() => {
+      if (!post) {
+        return;
+      }
+      if (!post.image_uuid) {
+        return;
+      }
+
+      try {
+        const response = await axios.get<Image>(
+          `https://honnaka-backend.azurewebsites.net/api/v1/image/${post.image_uuid}`
+        );
+
+        if (!ignore) {
+          setImage(response.data);
+          console.log("location:", response.data);
+        }
+      }
+      catch (e) {
+        console.log(`Exception: ${e}`)
+      }
+    };
+
+    fetchImage();
+
+    return () => {
+      ignore = true;
+    }
+  }, [location]);
+
+  useEffect(() => {
+    let ignore = false;
+
     const fetchReaction = async() => {
       if (!post) {
         return;
@@ -262,7 +297,7 @@ const home = () => {
     return () => {
       ignore = true;
     }
-  }, [location]);
+  }, [image]);
 
   useEffect(() => {
     let ignore = false;
@@ -397,25 +432,37 @@ const home = () => {
     return body;
   }
 
+  const get_image = () => {
+    if (image) {
+      if (image.body != "") {
+        return (
+          <CardMedia sx={{ height: 384 }} image={image.body}></CardMedia>
+        );
+      }
+    }
+
+    return;
+  }
+
   const get_like = (like: boolean | undefined) => {
     if (like) {
       return (
-        <FavoriteIcon />
+        <FavoriteIcon color="secondary" />
       );
     }
     return (
-      <FavoriteBorderIcon />
+      <FavoriteBorderIcon color="secondary" />
     );
   }
 
   const get_super_like = (super_like: boolean | undefined) => {
     if (super_like) {
       return (
-        <StarIcon />
+        <StarIcon color="warning" />
       );
     }
     return (
-      <StarBorderIcon />
+      <StarBorderIcon color="warning" />
     );
   }
 
@@ -569,6 +616,7 @@ const home = () => {
       <Header/>
       <div style={styles.cardContainer}>
         <Card sx={{ maxWidth: 768 }}>
+          {get_image()}
           <CardContent>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {get_user_name()}
