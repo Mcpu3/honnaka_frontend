@@ -330,8 +330,11 @@ const home = () => {
     let body = "";
 
     if (tags) {
-      for (let i = 0; i < tags.length; i++) {
+      for (let i = 0; i < tags.length - 1; i++) {
         body += tags[i].body + ", ";
+      }
+      if (tags.length != 0) {
+        body += tags[tags.length - 1].body;
       }
     }
 
