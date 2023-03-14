@@ -209,6 +209,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./header";
+import { Card, CardContent, Typography } from "@mui/material";
 
 interface User {
   user_uuid: "string";
@@ -250,18 +251,33 @@ async function getUserInfo(): Promise<User> {
   });
   return res.data;
 }
+const styles = {
+  cardContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+  },
+};
 
 const MyPage = () => {
   const [username, setUsername] = useState<string>("");
   const [myUser, setMyUser] = useState<User | null>(null);
   const [post, setPost] = useState<Post | undefined>(undefined);
+  const [accessToken, setAccesstoken] = useState<string>("");
   useEffect(() => {
     let ignore = false;
 
     const fetchPost = async () => {
+      const accessToken = localStorage.getItem("access_token");
       try {
         const response = await axios.get<Post>(
-          "https://honnaka-backend.azurewebsites.net/api/v1/me/posts"
+          "https://honnaka-backend.azurewebsites.net/api/v1/me/posts",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
         );
 
         if (!ignore) {
@@ -272,28 +288,62 @@ const MyPage = () => {
         console.log(`Exception: ${e}`);
       }
     };
+    if (!accessToken) return;
 
     fetchPost();
 
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [accessToken]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const getPost = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      try {
+        const respost = await axios.get<Post>(
+          "https://honnaka-backend.azurewebsites.net/api/v1/post/d2b4b071-6930-4162-a5e7-b2296b987ddf",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (!ignore) {
+          setPost(respost.data);
+          console.log("post:", respost.data);
+        }
+      } catch (e) {
+        console.log(`Exception: ${e}`);
+      }
+    };
+    if (!accessToken) return;
+
+    getPost();
+
+    return () => {
+      ignore = true;
+    };
+  }, [accessToken]);
 
   useEffect(() => {
     const fetchMyPageData = async () => {
       try {
-        const accessToken = localStorage.getItem("access_token");
-        console.log(accessToken);
-        if (!accessToken) {
+        const token = localStorage.getItem("access_token");
+        // console.log(accessToken);
+        if (!token) {
           // アクセストークンがない場合は、ログイン画面にリダイレクト
           window.location.href = "./signin";
           return;
         }
+        setAccesstoken(token);
 
         getUserInfo().then((user) => {
           setMyUser(user);
-          console.log(myUser); // ユーザー情報をコンソールに出力する
+          // console.log(myUser); // ユーザー情報をコンソールに出力する
         });
       } catch (error) {
         console.error("Error:", error);
@@ -305,34 +355,91 @@ const MyPage = () => {
   if (!myUser) {
     return <div>Loading...</div>;
   }
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        // console.log(accessToken);
+        if (!token) {
+          // アクセストークンがない場合は、ログイン画面にリダイレクト
+          window.location.href = "./signin";
+          return;
+        }
+        setAccesstoken(token);
+
+        getUserInfo().then((user) => {
+          setMyUser(user);
+          // console.log(myUser); // ユーザー情報をコンソールに出力する
+        });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+    fetchMyPageData();
+  }, []);
 
   const summary = post && post.summary;
   const title = post && post.title;
   const body = post && post.body;
   const since = post && post.since;
+  const user_name = post && myUser.user_name;
 
   return (
+    // <div>
+    //   <Header />
+    //   <div>
+    //     <h1>My Page</h1>
+    //     <div>
+    //       <h2>Username :{myUser.user_name}</h2>
+    //     </div>
+    //     <div>
+    //       <h2>My Posts</h2>
+    //       <ul>
+    //         <li>{title}</li>
+    //         <li>{summary}</li>
+    //         <li>{body}</li>
+    //         <li>{since}</li>
+    //         {/* {post.map((post) => ( */}
+    //         {/* <li key={post.title}>
+    //           <h3>{post.title}</h3>
+    //           <p>{post.content}</p>
+    //         </li> */}
+    //         {/* ))} */}
+    //       </ul>
+    //     </div>
+    //   </div>
+    // </div>
     <div>
       <Header />
       <div>
-        <h1>My Page</h1>
+        <h1>My page</h1>
+        <h2>username : {user_name}</h2>
         <div>
-          <h2>Username :{myUser.user_name}</h2>
-        </div>
-        <div>
-          <h2>My Posts</h2>
-          <ul>
-            <li>{title}</li>
-            <li>{summary}</li>
-            <li>{body}</li>
-            <li>{since}</li>
-            {/* {post.map((post) => ( */}
-            {/* <li key={post.title}>
-              <h3>{post.title}</h3>
-              <p>{post.content}</p>
-            </li> */}
-            {/* ))} */}
-          </ul>
+          <Card sx={{ maxWidth: 768 }}>
+            <CardContent>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                {user_name}
+              </Typography>
+              <Typography variant="h5">{title}</Typography>
+              <Typography variant="body1">{summary}</Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                {since}
+              </Typography>
+            </CardContent>
+            {/* <CardActions>
+            <IconButton area-label="like" onClick={handle_like}>
+              {get_like(reaction?.like)}
+              {get_likes(reactions?.like)}
+            </IconButton>
+            <IconButton area-label="super_like" onClick={handle_super_like}>
+              {get_super_like(reaction?.super_like)}
+              {get_super_likes(reactions?.super_like)}
+            </IconButton>
+            <IconButton area-label="next" onClick={handle_next}>
+              <ArrowForwardIcon />
+            </IconButton>
+          </CardActions> */}
+          </Card>
         </div>
       </div>
     </div>
