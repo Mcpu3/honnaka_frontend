@@ -264,6 +264,36 @@ const home = () => {
     }
   }, [location]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    const fetchReactions = async() => {
+      if (!post) {
+        return;
+      }
+
+      try {
+        const response = await axios.get<Reactions>(
+          `https://honnaka-backend.azurewebsites.net/api/v1/post/${post.post_uuid}/reactions`
+        );
+
+        if (!ignore) {
+          setReactions(response.data);
+          console.log("reaction:", response.data);
+        }
+      }
+      catch (e) {
+        console.log(`Exception: ${e}`)
+      }
+    };
+
+    fetchReactions();
+
+    return () => {
+      ignore = true;
+    }
+  }, [reaction]);
+
   const get_user_name = () => {
     let user_name = "";
 
@@ -386,6 +416,20 @@ const home = () => {
     );
   }
 
+  const get_likes = (likes: number | undefined) => {
+    if (likes) {
+      return likes;
+    }
+    return 0;
+  }
+
+  const get_super_likes = (super_likes: number | undefined) => {
+    if (super_likes) {
+      return super_likes;
+    }
+    return 0;
+  }
+
   const fetchReaction = async() => {
     if (!post) {
       return;
@@ -408,6 +452,24 @@ const home = () => {
       );
 
       setReaction(response.data);
+      console.log("reaction:", response.data);
+    }
+    catch (e) {
+      console.log(`Exception: ${e}`)
+    }
+  };
+
+  const fetchReactions = async() => {
+    if (!post) {
+      return;
+    }
+
+    try {
+      const response = await axios.get<Reactions>(
+        `https://honnaka-backend.azurewebsites.net/api/v1/post/${post.post_uuid}/reactions`
+      );
+
+      setReactions(response.data);
       console.log("reaction:", response.data);
     }
     catch (e) {
@@ -452,6 +514,7 @@ const home = () => {
     }
     
     fetchReaction();
+    fetchReactions();
   }
 
   const handle_super_like = async() => {
@@ -491,6 +554,7 @@ const home = () => {
     }
 
     fetchReaction();
+    fetchReactions();
   }
 
   const handle_next = () => {
@@ -535,9 +599,11 @@ const home = () => {
           <CardActions>
             <IconButton area-label="like" onClick={handle_like}>
               {get_like(reaction?.like)}
+              {get_likes(reactions?.like)}
             </IconButton>
             <IconButton area-label="super_like" onClick={handle_super_like}>
               {get_super_like(reaction?.super_like)}
+              {get_super_likes(reactions?.super_like)}
             </IconButton>
             <IconButton area-label="next" onClick={handle_next}>
               <ArrowForwardIcon />
