@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 import { useDropzone } from 'react-dropzone';
 import axios, { AxiosError } from "axios";
 import IconButton from '@mui/material/IconButton'
@@ -97,7 +98,7 @@ export default function PostForm() {
   return (
     <div>
       <IconButton onClick={handleOpen}>
-        <CreateIcon></CreateIcon>
+        <CreateIcon/>
       </IconButton>
       <Modal
         open={open}
@@ -109,60 +110,68 @@ export default function PostForm() {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             新規投稿
           </Typography>
-          <TextField
-            autoFocus
-            margin="normal"
-            id="title"
-            label="タイトル"
-            type="text"
-            variant="standard"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-
-          <TextField
-            autoFocus
-            margin="normal"
-            id="tags"
-            label="タグ"
-            type="text"
-            variant="standard"
-            value={tags}
-            onChange={(e) => setTags([e.target.value])}
-          />
-          
-          <TextField
-            autoFocus
-            margin="normal"
-            id="location"
-            label="位置情報"
-            type="text"
-            variant="standard"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-        
-          <TextField
-            autoFocus
-            margin="normal"
-            id="website"
-            label="サイトURL"
-            type="text"
-            variant="standard"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-          />
-
-          <TextField
-            autoFocus
-            margin="normal"
-            id="since"
-            label="いつから？"
-            type="text"
-            variant="standard"
-            value={since}
-            onChange={(e) => setSince(e.target.value)}
-          />
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <TextField
+                autoFocus
+                margin="normal"
+                id="title"
+                label="タイトル"
+                type="text"
+                variant="standard"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                autoFocus
+                margin="normal"
+                id="tags"
+                label="タグ"
+                type="text"
+                variant="standard"
+                value={tags}
+                onChange={(e) => setTags([e.target.value])}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                autoFocus
+                margin="normal"
+                id="location"
+                label="位置情報"
+                type="text"
+                variant="standard"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                autoFocus
+                margin="normal"
+                id="website"
+                label="サイトURL"
+                type="text"
+                variant="standard"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                autoFocus
+                margin="normal"
+                id="since"
+                label="いつから？"
+                type="text"
+                variant="standard"
+                value={since}
+                onChange={(e) => setSince(e.target.value)}
+              />
+            </Grid>
+          </Grid>
 
           <TextField
             autoFocus
