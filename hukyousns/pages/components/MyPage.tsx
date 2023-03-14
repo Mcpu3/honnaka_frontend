@@ -355,28 +355,6 @@ const MyPage = () => {
   if (!myUser) {
     return <div>Loading...</div>;
   }
-  useEffect(() => {
-    const fetchMyPageData = async () => {
-      try {
-        const token = localStorage.getItem("access_token");
-        // console.log(accessToken);
-        if (!token) {
-          // アクセストークンがない場合は、ログイン画面にリダイレクト
-          window.location.href = "./signin";
-          return;
-        }
-        setAccesstoken(token);
-
-        getUserInfo().then((user) => {
-          setMyUser(user);
-          // console.log(myUser); // ユーザー情報をコンソールに出力する
-        });
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    fetchMyPageData();
-  }, []);
 
   const summary = post && post.summary;
   const title = post && post.title;
