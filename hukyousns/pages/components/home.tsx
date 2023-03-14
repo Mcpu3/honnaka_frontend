@@ -18,6 +18,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PostForm from "./modal";
 
 const styles = {
   cardContainer: {
@@ -662,6 +663,7 @@ const home = () => {
           </CardActions>
         </Card>
       </div>
+      <PostForm />
     </div>
   );
 };
