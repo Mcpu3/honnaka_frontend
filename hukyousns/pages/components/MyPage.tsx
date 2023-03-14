@@ -4,6 +4,7 @@ import Header from "./header";
 import { Card, CardContent, Typography } from "@mui/material";
 import { ConnectedTvOutlined } from "@mui/icons-material";
 import { access } from "fs";
+// import sequence from "./lib";
 
 interface User {
   user_uuid: "string";
@@ -167,35 +168,51 @@ const MyPage = () => {
       }
     };
     fetchMyPageData();
-  }, []);
+  }, [posts]);
 
   if (!myUser) {
     return <div>Loading...</div>;
   }
 
+  const create_card = (post: Post) => {
+    return (
+      <Card sx={{ maxWidth: 768 }}>
+        <CardContent>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {myUser.user_name}
+          </Typography>
+          <Typography variant="h5">{post.title}</Typography>
+          <Typography variant="body1">{post.summary}</Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {post.since}
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const create_cards = () => {
+    if (!posts) {
+      return;
+    }
+
+    const res = [];
+    posts.forEach((post) => {
+      res.push(create_card(post));
+    });
+
+    return res;
+  };
+
   return (
-    <div>a</div>
-    // <div>
-    //   <Header />
-    //   <div>
-    //     <h1>My page</h1>
-    //     <h2>username : {user_name}</h2>
-    //     <div>
-    //       <Card sx={{ maxWidth: 768 }}>
-    //         <CardContent>
-    //           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-    //             {user_name}
-    //           </Typography>
-    //           <Typography variant="h5">{title}</Typography>
-    //           <Typography variant="body1">{summary}</Typography>
-    //           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-    //             {since}
-    //           </Typography>
-    //         </CardContent>
-    //       </Card>
-    //     </div>
-    //   </div>
-    // </div>
+    <div>
+      <Header />
+      <div>
+        <h1>My page</h1>
+        <h2>username : {myUser.user_name}</h2>
+        <div>{create_cards()}</div>
+      </div>
+    </div>
   );
 };
 
