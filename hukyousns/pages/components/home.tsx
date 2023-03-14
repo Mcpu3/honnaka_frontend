@@ -18,6 +18,15 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+const styles = {
+  cardContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+  },
+};
+
 interface User {
   user_uuid: string,
   user_name: string,
@@ -154,17 +163,12 @@ const home = () => {
   useEffect(() => {
     let ignore = false;
 
-    const fetchTag = async(tag_uuid: string) => {
-      try {
-        const response = await axios.get<Tag>(
-          `https://honnaka-backend.azurewebsites.net/api/v1/tag/${tag_uuid}`
-        );
+    const fetchTag = async(tag_uuid: string): Promise<Tag> => {
+      const response = await axios.get<Tag>(
+        `https://honnaka-backend.azurewebsites.net/api/v1/tag/${tag_uuid}`
+      );
 
-        return response.data;
-      }
-      catch (e) {
-        console.log(`Exception: ${e}`)
-      }
+      return response.data;
     };
 
     const fetchTags = async() => {
@@ -173,11 +177,11 @@ const home = () => {
       }
 
       if (!ignore) {
-        post.tags_uuid.forEach(tag_uuid => {
-          fetchTag(tag_uuid).then(tag => {
-            tags.push(tag!);
-          });
-        });
+        const data = await Promise.all(
+          post.tags_uuid.map(tag_uuid => fetchTag(tag_uuid))
+        );
+
+        setTags(data);
         console.log("tags:", tags);
       }
     };
@@ -382,13 +386,46 @@ const home = () => {
     );
   }
 
-  const handle_like = async() => {
-    if (!post || !reaction) {
+  const fetchReaction = async() => {
+    if (!post) {
       return;
     }
 
-    const like = !reaction.like;
-    const super_like = reaction.super_like;
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) {
+        window.location.href = "./signin"
+        return;
+      }
+
+      const response = await axios.get<Reaction>(
+        `https://honnaka-backend.azurewebsites.net/api/v1/me/reaction/${post.post_uuid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      );
+
+      setReaction(response.data);
+      console.log("reaction:", response.data);
+    }
+    catch (e) {
+      console.log(`Exception: ${e}`)
+    }
+  };
+
+  const handle_like = async() => {
+    if (!post) {
+      return;
+    }
+
+    let like = true;
+    let super_like = false;
+    if (reaction) {
+      like = !reaction.like;
+      super_like = reaction.super_like;
+    }
 
     try {
       const accessToken = localStorage.getItem("access_token");
@@ -398,7 +435,7 @@ const home = () => {
       }
 
       const response = await axios.post<NewReaction>(
-        `https://honnaka-backend.azurewebsites.net/api/v1/me/reaction/${post.post_uuid}`,
+        `https://honnaka-backend.azurewebsites.net/api/v1/post/${post.post_uuid}/reaction`,
         {
           like,
           super_like
@@ -413,6 +450,8 @@ const home = () => {
     catch (e) {
       console.log(`Exception: ${e}`)
     }
+    
+    fetchReaction();
   }
 
   const handle_super_like = async() => {
@@ -421,14 +460,11 @@ const home = () => {
     }
 
     let like = false;
-    let super_like = false;
+    let super_like = true;
     if (reaction) {
       like = reaction.like;
       super_like = !reaction.super_like;
     }
-
-    const like = reaction.like;
-    const super_like = !reaction.super_like;
 
     try {
       const accessToken = localStorage.getItem("access_token");
@@ -437,8 +473,8 @@ const home = () => {
         return;
       }
 
-      const response = await axios.post<NewReaction>(
-        `https://honnaka-backend.azurewebsites.net/api/v1/me/reaction/${post.post_uuid}`,
+      const response = await axios.post(
+        `https://honnaka-backend.azurewebsites.net/api/v1/post/${post.post_uuid}/reaction`,
         {
           like,
           super_like
@@ -453,6 +489,8 @@ const home = () => {
     catch (e) {
       console.log(`Exception: ${e}`)
     }
+
+    fetchReaction();
   }
 
   const handle_next = () => {
@@ -460,49 +498,54 @@ const home = () => {
   }
 
   return (
-    <Card sx={{ maxWidth: 768 }}>
-      <CardContent>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {get_user_name()}
-        </Typography>
-        <Typography variant="h5">
-          {get_title()}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {get_created_at()}
-        </Typography>
-        <Typography variant="body1">
-          {get_summary()}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} variant="body2">
-          <LocalOfferIcon />
-          {get_tags()}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} variant="body2">
-          <LanguageIcon />
-          <Link href={get_website()}>
-            {get_website()}
-          </Link>
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {get_location_and_since()}
-        </Typography>
-        <Typography variant="body1">
-          {get_body()}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <IconButton area-label="like" onClick={handle_like}>
-          {get_like(reaction?.like)}
-        </IconButton>
-        <IconButton area-label="super_like" onClick={handle_super_like}>
-          {get_super_like(reaction?.super_like)}
-        </IconButton>
-        <IconButton area-label="next" onClick={handle_next}>
-          <ArrowForwardIcon />
-        </IconButton>
-      </CardActions>
-    </Card>
+    <div>
+      <Header/>
+      <div style={styles.cardContainer}>
+        <Card sx={{ maxWidth: 768 }}>
+          <CardContent>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {get_user_name()}
+            </Typography>
+            <Typography variant="h5">
+              {get_title()}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {get_created_at()}
+            </Typography>
+            <Typography variant="body1">
+              {get_summary()}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} variant="body2">
+              <LocalOfferIcon />
+              {get_tags()}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} variant="body2">
+              <LanguageIcon />
+              <Link href={get_website()}>
+                {get_website()}
+              </Link>
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {get_location_and_since()}
+            </Typography>
+            <Typography variant="body1">
+              {get_body()}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <IconButton area-label="like" onClick={handle_like}>
+              {get_like(reaction?.like)}
+            </IconButton>
+            <IconButton area-label="super_like" onClick={handle_super_like}>
+              {get_super_like(reaction?.super_like)}
+            </IconButton>
+            <IconButton area-label="next" onClick={handle_next}>
+              <ArrowForwardIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
+      </div>
+    </div>
   );
 };
 
