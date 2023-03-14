@@ -6,6 +6,8 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { useDropzone } from 'react-dropzone';
 import axios, { AxiosError } from "axios";
+import IconButton from '@mui/material/IconButton'
+import CreateIcon from '@mui/icons-material/Create';
 
 
 const style = {
@@ -14,7 +16,6 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 600,
-  height: 300,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -34,11 +35,28 @@ export default function PostForm() {
   const [website,setWebsite] = React.useState<string>("");
   const [location,setLocation] = React.useState<string>("");
   const [since,setSince] = React.useState<string>("");
-  const [image,setImage] = React.useState<string>("");
+  const [base64Image, setBase64Image] = React.useState("");
   const [body,setBody] = React.useState<string>("");
 
 
   const endpointUrl = "https://honnaka-backend.azurewebsites.net/api/v1/post";
+
+  function handleFileDrop(acceptedFiles) {
+    console.log(acceptedFiles)
+    const reader = new FileReader();
+    reader.readAsDataURL(acceptedFiles[0]);
+    reader.onload = () => {
+      setBase64Image(reader.result);
+    };
+  }
+
+  function handleImageRemove() {
+    setBase64Image("");
+  }
+  
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: handleFileDrop ,maxFiles: 1});
+
 
   const newPost = async () => {
     const requestData = {
@@ -47,7 +65,7 @@ export default function PostForm() {
       website: website,
       location: location,
       since: since,
-      image: image,
+      image: base64Image,
       body: body
     };
 
@@ -78,7 +96,9 @@ export default function PostForm() {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <IconButton onClick={handleOpen}>
+        <CreateIcon></CreateIcon>
+      </IconButton>
       <Modal
         open={open}
         onClose={handleClose}
@@ -151,11 +171,30 @@ export default function PostForm() {
             label="本文"
             type="text"
             multiline
+            fullWidth
             rows={(4)}
             variant="outlined"
             value={body}
             onChange={(e) => setBody(e.target.value)}
           />
+
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <p>ここにファイルをドロップしてください</p>
+            ) : (
+              <Button variant="contained" component="span">
+                ファイルを選択
+              </Button>
+            )}
+          </div>
+          {base64Image && (
+            <div>
+              <h2>選択されたファイル</h2>
+              <img src={base64Image} alt="uploaded file" />
+              <Button variant="contained" onClick={handleImageRemove}>画像を取り消す</Button>
+            </div>
+          )}
 
           <Button size="small" variant ="contained" onClick={newPost}>Post</Button>
         </Box>
