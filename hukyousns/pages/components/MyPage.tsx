@@ -231,6 +231,14 @@ interface Post {
   created_at: Date;
   updated_at: Date | undefined;
 }
+
+interface me {
+  user_uuid: string;
+  user_name: string;
+  display_name: string;
+  created_at: string;
+  updated_at: string;
+}
 const API_ENDPOINT = "https://honnaka-backend.azurewebsites.net/api/v1/me";
 
 async function getUserInfo(): Promise<User> {
@@ -253,7 +261,7 @@ const MyPage = () => {
     const fetchPost = async () => {
       try {
         const response = await axios.get<Post>(
-          "https://honnaka-backend.azurewebsites.net/api/v1/post"
+          "https://honnaka-backend.azurewebsites.net/api/v1/me/posts"
         );
 
         if (!ignore) {
@@ -298,6 +306,11 @@ const MyPage = () => {
     return <div>Loading...</div>;
   }
 
+  const summary = post && post.summary;
+  const title = post && post.title;
+  const body = post && post.body;
+  const since = post && post.since;
+
   return (
     <div>
       <Header />
@@ -309,10 +322,10 @@ const MyPage = () => {
         <div>
           <h2>My Posts</h2>
           <ul>
-            <li>{post!.title}</li>
-            <li>{post!.summary}</li>
-            <li>{post!.body}</li>
-            <li>{post!.since}</li>
+            <li>{title}</li>
+            <li>{summary}</li>
+            <li>{body}</li>
+            <li>{since}</li>
             {/* {post.map((post) => ( */}
             {/* <li key={post.title}>
               <h3>{post.title}</h3>
