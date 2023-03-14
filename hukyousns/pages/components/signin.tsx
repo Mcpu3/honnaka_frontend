@@ -169,7 +169,7 @@ const SignupAndLogin = () => {
       console.log(response.data.access_token);
 
       localStorage.setItem("access_token", response.data.access_token);
-      handler("./homePage");
+      handler("./home");
     } catch (error) {
       console.error("Error:", error);
     }
