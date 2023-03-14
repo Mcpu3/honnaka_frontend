@@ -204,6 +204,7 @@ const SignupAndLogin = () => {
             <Typography className="mt-1">Password</Typography>
             <input
               value={password}
+              type="password"
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
