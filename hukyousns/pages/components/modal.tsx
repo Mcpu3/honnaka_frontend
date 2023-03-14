@@ -54,6 +54,7 @@ export default function PostForm() {
   function handleImageRemove() {
     setBase64Image("");
   }
+
   
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: handleFileDrop ,maxFiles: 1});
@@ -193,7 +194,7 @@ export default function PostForm() {
               <p>ここにファイルをドロップしてください</p>
             ) : (
               <Button variant="contained" component="span">
-                ファイルを選択
+                アップロードする画像ファイルを選択
               </Button>
             )}
           </div>
@@ -205,9 +206,10 @@ export default function PostForm() {
             </div>
           )}
 
-          <Button size="small" variant ="contained" onClick={newPost}>Post</Button>
+          <Button style={{ marginTop: '1rem' }} size="small" variant ="contained" onClick={newPost}>Post</Button>
         </Box>
       </Modal>
     </div>
   );
 }
+
