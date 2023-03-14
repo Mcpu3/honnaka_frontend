@@ -3,5 +3,6 @@
 @import "~tailwindcss/utilities";
 
 html {
-  background-color: rgba(208, 209, 209, 0.648);
+  background-image: url('./../public/background.jpg')
+  /* background-color: rgba(208, 209, 209, 0.648); */
 }
