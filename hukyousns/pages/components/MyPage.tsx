@@ -176,7 +176,7 @@ const MyPage = () => {
 
   const create_card = (post: Post) => {
     return (
-      <Card sx={{ maxWidth: 768 }}>
+      <Card sx={{ maxWidth: 768, mt: 2 }}>
         <CardContent>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {myUser.user_name}
