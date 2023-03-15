@@ -69,6 +69,8 @@ const MyPage = () => {
   const [articles, setArticles] = useState<Post[]>([]);
   const [leng, setLeng] = useState<number>(0);
   const [postsUuid, setPostsUuid] = useState<PostsUuid | undefined>(undefined);
+  const [resUser, setresUser] = useState<PostsUuid | undefined>(undefined);
+
   useEffect(() => {
     let ignore = false;
 
@@ -91,6 +93,7 @@ const MyPage = () => {
         if (!ignore) {
           setPostsUuid(response.data);
           console.log(response.data);
+          setresUser(response.data);
         }
       } catch (e) {
         console.log(`Exception: ${e}`);
@@ -170,6 +173,7 @@ const MyPage = () => {
         console.error("Error:", error);
       }
     };
+
     fetchMyPageData();
   }, [posts]);
 
@@ -190,7 +194,7 @@ const MyPage = () => {
       >
         <CardContent>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {myUser.user_name}
+            Infomation
           </Typography>
           <Typography variant="h5">{post.title}</Typography>
           <Typography variant="body1">{post.summary}</Typography>
