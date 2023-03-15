@@ -11,13 +11,13 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import LanguageIcon from '@mui/icons-material/Language';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import LanguageIcon from "@mui/icons-material/Language";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PostForm from "./modal";
 
 const styles = {
@@ -30,68 +30,68 @@ const styles = {
 };
 
 interface User {
-  user_uuid: string,
-  user_name: string,
-  display_name: string | undefined,
-  created_at: string,
-  updated_at: string | undefined
-};
+  user_uuid: string;
+  user_name: string;
+  display_name: string | undefined;
+  created_at: string;
+  updated_at: string | undefined;
+}
 
 interface Post {
-  post_uuid: string,
-  user_uuid: string,
-  title: string,
-  summary: string | undefined,
-  tags_uuid: string[],
-  website: string | undefined,
-  location_uuid: string | undefined,
-  since: string | undefined,
-  image_uuid: string | undefined,
-  body: string,
-  created_at: Date,
-  updated_at: Date | undefined
-};
+  post_uuid: string;
+  user_uuid: string;
+  title: string;
+  summary: string | undefined;
+  tags_uuid: string[];
+  website: string | undefined;
+  location_uuid: string | undefined;
+  since: string | undefined;
+  image_uuid: string | undefined;
+  body: string;
+  created_at: Date;
+  updated_at: Date | undefined;
+}
 
 interface Tag {
-  tag_uuid: string,
-  body: string,
-  created_at: string,
-  updated_at: string | undefined
-};
+  tag_uuid: string;
+  body: string;
+  created_at: string;
+  updated_at: string | undefined;
+}
 
 interface Location {
-  location_uuid: string,
-  body: string,
-  created_at: string,
-  updated_at: string | undefined
-};
+  location_uuid: string;
+  body: string;
+  created_at: string;
+  updated_at: string | undefined;
+}
 
 interface Image {
-  image_uuid: string,
-  user_uuid: string,
-  body: string,
-  created_at: string,
-  updated_at: string | undefined
-};
+  image_uuid: string;
+  user_uuid: string;
+  body: string;
+  created_at: string;
+  updated_at: string | undefined;
+}
 
 interface Reaction {
-  reaction_uuid: string,
-  user_uuid: string,
-  post_uuid: string,
-  like: boolean,
-  super_like: boolean,
-  created_at: Date,
-  updated_at: Date
-};
+  reaction_uuid: string;
+  user_uuid: string;
+  post_uuid: string;
+  like: boolean;
+  super_like: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
 
 interface Reactions {
-  like: number,
-  super_like: number
-};
+  like: number;
+  super_like: number;
+}
 
 interface NewReaction {
-  like: boolean,
-  super_like: boolean
+  like: boolean;
+  super_like: boolean;
 }
 
 const Home = () => {
@@ -110,7 +110,7 @@ const Home = () => {
   useEffect(() => {
     let ignore = false;
 
-    const fetchPost = async() => {
+    const fetchPost = async () => {
       try {
         const response = await axios.get<Post>(
           "https://honnaka-backend.azurewebsites.net/api/v1/post"
@@ -120,23 +120,22 @@ const Home = () => {
           setPost(response.data);
           console.log("post:", response.data);
         }
-      }
-      catch (e) {
-        console.log(`Exception: ${e}`)
+      } catch (e) {
+        console.log(`Exception: ${e}`);
       }
     };
 
     fetchPost();
 
-    return() => {
+    return () => {
       ignore = true;
-    }
+    };
   }, []);
 
   useEffect(() => {
     let ignore = false;
 
-    const fetchUser = async() => {
+    const fetchUser = async () => {
       if (!post) {
         return;
       }
@@ -150,9 +149,8 @@ const Home = () => {
           setUser(response.data);
           console.log("user:", response.data);
         }
-      }
-      catch (e) {
-        console.log(`Exception: ${e}`)
+      } catch (e) {
+        console.log(`Exception: ${e}`);
       }
     };
 
@@ -160,13 +158,13 @@ const Home = () => {
 
     return () => {
       ignore = true;
-    }
+    };
   }, [post]);
 
   useEffect(() => {
     let ignore = false;
 
-    const fetchTag = async(tag_uuid: string): Promise<Tag> => {
+    const fetchTag = async (tag_uuid: string): Promise<Tag> => {
       const response = await axios.get<Tag>(
         `https://honnaka-backend.azurewebsites.net/api/v1/tag/${tag_uuid}`
       );
@@ -174,14 +172,14 @@ const Home = () => {
       return response.data;
     };
 
-    const fetchTags = async() => {
+    const fetchTags = async () => {
       if (!post) {
         return;
       }
 
       if (!ignore) {
         const data = await Promise.all(
-          post.tags_uuid.map(tag_uuid => fetchTag(tag_uuid))
+          post.tags_uuid.map((tag_uuid) => fetchTag(tag_uuid))
         );
 
         setTags(data);
@@ -193,13 +191,13 @@ const Home = () => {
 
     return () => {
       ignore = true;
-    }
+    };
   }, [user]);
 
   useEffect(() => {
     let ignore = false;
 
-    const fetchLocation = async() => {
+    const fetchLocation = async () => {
       if (!post) {
         return;
       }
@@ -213,9 +211,8 @@ const Home = () => {
           setLocation(response.data);
           console.log("location:", response.data);
         }
-      }
-      catch (e) {
-        console.log(`Exception: ${e}`)
+      } catch (e) {
+        console.log(`Exception: ${e}`);
       }
     };
 
@@ -223,13 +220,13 @@ const Home = () => {
 
     return () => {
       ignore = true;
-    }
+    };
   }, [tags]);
 
   useEffect(() => {
     let ignore = false;
 
-    const fetchImage = async() => {
+    const fetchImage = async () => {
       if (!post) {
         return;
       }
@@ -246,9 +243,8 @@ const Home = () => {
           setImage(response.data);
           console.log("location:", response.data);
         }
-      }
-      catch (e) {
-        console.log(`Exception: ${e}`)
+      } catch (e) {
+        console.log(`Exception: ${e}`);
       }
     };
 
@@ -256,13 +252,13 @@ const Home = () => {
 
     return () => {
       ignore = true;
-    }
+    };
   }, [location]);
 
   useEffect(() => {
     let ignore = false;
 
-    const fetchReaction = async() => {
+    const fetchReaction = async () => {
       if (!post) {
         return;
       }
@@ -270,7 +266,7 @@ const Home = () => {
       try {
         const accessToken = localStorage.getItem("access_token");
         if (!accessToken) {
-          window.location.href = "./signin"
+          window.location.href = "./signin";
           return;
         }
 
@@ -278,8 +274,8 @@ const Home = () => {
           `https://honnaka-backend.azurewebsites.net/api/v1/me/reaction/${post.post_uuid}`,
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           }
         );
 
@@ -287,9 +283,8 @@ const Home = () => {
           setReaction(response.data);
           console.log("reaction:", response.data);
         }
-      }
-      catch (e) {
-        console.log(`Exception: ${e}`)
+      } catch (e) {
+        console.log(`Exception: ${e}`);
       }
     };
 
@@ -297,13 +292,13 @@ const Home = () => {
 
     return () => {
       ignore = true;
-    }
+    };
   }, [image]);
 
   useEffect(() => {
     let ignore = false;
 
-    const fetchReactions = async() => {
+    const fetchReactions = async () => {
       if (!post) {
         return;
       }
@@ -317,9 +312,8 @@ const Home = () => {
           setReactions(response.data);
           console.log("reaction:", response.data);
         }
-      }
-      catch (e) {
-        console.log(`Exception: ${e}`)
+      } catch (e) {
+        console.log(`Exception: ${e}`);
       }
     };
 
@@ -327,7 +321,7 @@ const Home = () => {
 
     return () => {
       ignore = true;
-    }
+    };
   }, [reaction]);
 
   const get_user_name = () => {
@@ -338,7 +332,7 @@ const Home = () => {
     }
 
     return user_name;
-  }
+  };
 
   const get_title = () => {
     let title = "";
@@ -360,7 +354,7 @@ const Home = () => {
     }
 
     return summary;
-  }
+  };
 
   const get_tags = () => {
     let body = "";
@@ -374,8 +368,8 @@ const Home = () => {
       }
     }
 
-    return body
-  }
+    return body;
+  };
 
   const get_website = () => {
     let website = "";
@@ -387,8 +381,7 @@ const Home = () => {
     }
 
     return website;
-  }
-
+  };
 
   const get_created_at = () => {
     let created_at = "";
@@ -396,8 +389,7 @@ const Home = () => {
     if (post) {
       if (!post.updated_at) {
         created_at = post.created_at.toLocaleString("ja-JP");
-      }
-      else {
+      } else {
         created_at = post.updated_at.toLocaleString("ja-JP");
       }
     }
@@ -411,17 +403,15 @@ const Home = () => {
     if (post) {
       if (location && post.since) {
         location_and_since = `これは${location.body}で行うことが多く、${post.since}から継続しています。`;
-      }
-      else if (location) {
+      } else if (location) {
         location_and_since = `これは${location.body}で行うことが多いです。`;
-      }
-      else if (post.since) {
+      } else if (post.since) {
         location_and_since = `${post.since}から継続しています。`;
       }
     }
 
     return location_and_since;
-  }
+  };
 
   const get_body = () => {
     let body = "";
@@ -431,57 +421,47 @@ const Home = () => {
     }
 
     return body;
-  }
+  };
 
   const get_image = () => {
     if (image) {
       if (image.body != "") {
-        return (
-          <CardMedia sx={{ height: 384 }} image={image.body}></CardMedia>
-        );
+        return <CardMedia sx={{ height: 384 }} image={image.body}></CardMedia>;
       }
     }
 
     return;
-  }
+  };
 
   const get_like = (like: boolean | undefined) => {
     if (like) {
-      return (
-        <FavoriteIcon color="secondary" />
-      );
+      return <FavoriteIcon color="secondary" />;
     }
-    return (
-      <FavoriteBorderIcon color="secondary" />
-    );
-  }
+    return <FavoriteBorderIcon color="secondary" />;
+  };
 
   const get_super_like = (super_like: boolean | undefined) => {
     if (super_like) {
-      return (
-        <StarIcon color="warning" />
-      );
+      return <StarIcon color="warning" />;
     }
-    return (
-      <StarBorderIcon color="warning" />
-    );
-  }
+    return <StarBorderIcon color="warning" />;
+  };
 
   const get_likes = (likes: number | undefined) => {
     if (likes) {
       return likes;
     }
     return 0;
-  }
+  };
 
   const get_super_likes = (super_likes: number | undefined) => {
     if (super_likes) {
       return super_likes;
     }
     return 0;
-  }
+  };
 
-  const fetchReaction = async() => {
+  const fetchReaction = async () => {
     if (!post) {
       return;
     }
@@ -489,7 +469,7 @@ const Home = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       if (!accessToken) {
-        window.location.href = "./signin"
+        window.location.href = "./signin";
         return;
       }
 
@@ -497,20 +477,19 @@ const Home = () => {
         `https://honnaka-backend.azurewebsites.net/api/v1/me/reaction/${post.post_uuid}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
 
       setReaction(response.data);
       console.log("reaction:", response.data);
-    }
-    catch (e) {
-      console.log(`Exception: ${e}`)
+    } catch (e) {
+      console.log(`Exception: ${e}`);
     }
   };
 
-  const fetchReactions = async() => {
+  const fetchReactions = async () => {
     if (!post) {
       return;
     }
@@ -522,13 +501,12 @@ const Home = () => {
 
       setReactions(response.data);
       console.log("reaction:", response.data);
-    }
-    catch (e) {
-      console.log(`Exception: ${e}`)
+    } catch (e) {
+      console.log(`Exception: ${e}`);
     }
   };
 
-  const handle_like = async() => {
+  const handle_like = async () => {
     if (!post) {
       return;
     }
@@ -543,7 +521,7 @@ const Home = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       if (!accessToken) {
-        window.location.href = "./signin"
+        window.location.href = "./signin";
         return;
       }
 
@@ -551,24 +529,23 @@ const Home = () => {
         `https://honnaka-backend.azurewebsites.net/api/v1/post/${post.post_uuid}/reaction`,
         {
           like,
-          super_like
+          super_like,
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
+    } catch (e) {
+      console.log(`Exception: ${e}`);
     }
-    catch (e) {
-      console.log(`Exception: ${e}`)
-    }
-    
+
     fetchReaction();
     fetchReactions();
-  }
+  };
 
-  const handle_super_like = async() => {
+  const handle_super_like = async () => {
     if (!post) {
       return;
     }
@@ -583,7 +560,7 @@ const Home = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       if (!accessToken) {
-        window.location.href = "./signin"
+        window.location.href = "./signin";
         return;
       }
 
@@ -591,62 +568,53 @@ const Home = () => {
         `https://honnaka-backend.azurewebsites.net/api/v1/post/${post.post_uuid}/reaction`,
         {
           like,
-          super_like
+          super_like,
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
-    }
-    catch (e) {
-      console.log(`Exception: ${e}`)
+    } catch (e) {
+      console.log(`Exception: ${e}`);
     }
 
     fetchReaction();
     fetchReactions();
-  }
+  };
 
   const handle_next = () => {
     window.location.href = "./home";
-  }
+  };
 
   return (
     <div>
-      <Header/>
+      <Header />
       <div style={styles.cardContainer}>
-        <Card sx={{ maxWidth: 768 }}>
+        <Card sx={{ maxWidth: 768, boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" }}>
           {get_image()}
           <CardContent>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {get_user_name()}
             </Typography>
-            <Typography variant="h5">
-              {get_title()}
-            </Typography>
+            <Typography variant="h5">{get_title()}</Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {get_created_at()}
             </Typography>
-            <Typography variant="body1">
-              {get_summary()}
-            </Typography>
+            <Typography variant="body1">{get_summary()}</Typography>
             <Typography sx={{ mb: 1.5 }} variant="body2">
               <LocalOfferIcon />
               {get_tags()}
             </Typography>
             <Typography sx={{ mb: 1.5 }} variant="body2">
               <LanguageIcon />
-              <Link href={get_website()}>
-                {get_website()}
-              </Link>
+              <Link href={get_website()}>{get_website()}</Link>
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {get_location_and_since()}
             </Typography>
-            <Typography variant="body1">
-              {get_body()}
-            </Typography>
+            <Typography variant="body1">{get_body()}</Typography>
           </CardContent>
           <CardActions>
             <IconButton area-label="like" onClick={handle_like}>

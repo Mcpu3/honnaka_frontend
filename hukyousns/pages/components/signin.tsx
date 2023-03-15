@@ -87,7 +87,7 @@ const SignupAndLogin = () => {
     <div>
       <Header />
       <div style={styles.cardContainer}>
-        <Card sx={{ maxWidth: 450 }}>
+        <Card sx={{ maxWidth: 450, boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" }}>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               PassionPulse

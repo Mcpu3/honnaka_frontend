@@ -182,7 +182,9 @@ const MyPage = () => {
 
   const create_card = (post: Post) => {
     return (
-      <Card sx={{ maxWidth: 768, mt: 2 }}>
+      <Card
+        sx={{ maxWidth: 768, mt: 2, boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" }}
+      >
         <CardContent>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {myUser.user_name}
