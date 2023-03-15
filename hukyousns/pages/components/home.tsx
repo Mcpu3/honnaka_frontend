@@ -94,7 +94,7 @@ interface NewReaction {
   super_like: boolean
 }
 
-const home = () => {
+const Home = () => {
   const [post, setPost] = useState<Post | undefined>(undefined);
   const [user, setUser] = useState<User | undefined>(undefined);
   const [tags, setTags] = useState<Tag[]>([]);
@@ -668,4 +668,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;
