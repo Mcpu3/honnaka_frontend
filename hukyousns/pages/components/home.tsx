@@ -329,6 +329,9 @@ const Home = () => {
 
     if (user) {
       user_name = user.user_name;
+      if (user.display_name) {
+        user_name = user.display_name;
+      }
     }
 
     return user_name;
