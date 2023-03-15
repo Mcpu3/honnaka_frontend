@@ -42,12 +42,13 @@ export default function PostForm() {
 
   const endpointUrl = "https://honnaka-backend.azurewebsites.net/api/v1/post";
 
-  function handleFileDrop(acceptedFiles) {
+  function handleFileDrop(acceptedFiles: any) {
     console.log(acceptedFiles)
     const reader = new FileReader();
     reader.readAsDataURL(acceptedFiles[0]);
     reader.onload = () => {
-      setBase64Image(reader.result);
+      const result = (reader.result as string);
+      setBase64Image(result);
     };
   }
 
