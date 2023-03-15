@@ -7,8 +7,11 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { useDropzone } from 'react-dropzone';
 import axios, { AxiosError } from "axios";
+import { Snackbar,Alert } from '@mui/material';
 import IconButton from '@mui/material/IconButton'
 import CreateIcon from '@mui/icons-material/Create';
+import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const style = {
@@ -30,7 +33,7 @@ const style = {
 export default function PostForm() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  
   const [title,setTitle] = React.useState<string>("");
   const [tags,setTags] = React.useState<string[]>([]);
   const [website,setWebsite] = React.useState<string>("");
@@ -38,6 +41,22 @@ export default function PostForm() {
   const [since,setSince] = React.useState<string>("");
   const [base64Image, setBase64Image] = React.useState("");
   const [body,setBody] = React.useState<string>("");
+
+  const [successSnackBarOpen,setSuccessSnackBarOpen] = React.useState(false);
+  const [successMessage,setSuccessMessage] = React.useState("");
+  const [errorSnackBarOpen,setErrorSnackBarOpen] = React.useState(false);
+  const [errorMessage,setErrorMessage] = React.useState("");
+
+  const handleClose = () => {
+    setTitle("");
+    setTags([]);
+    setWebsite("");
+    setLocation("");
+    setSince("");
+    setBase64Image("");
+    setBody("");
+    setOpen(false);
+  }
 
 
   const endpointUrl = "https://honnaka-backend.azurewebsites.net/api/v1/post";
@@ -55,6 +74,22 @@ export default function PostForm() {
     setBase64Image("");
   }
 
+  const handleSuccessSnackBarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessSnackBarOpen(false);
+  };
+
+  const handleErrorSnackBarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorSnackBarOpen(false);
+  };
+
   
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: handleFileDrop ,maxFiles: 1});
@@ -71,6 +106,12 @@ export default function PostForm() {
       body: body
     };
 
+    if(!title || !location || !body){
+      setErrorMessage("未記入の項目があります");
+      setErrorSnackBarOpen(true);
+      return;
+    }
+
     try {
       const accessToken = localStorage.getItem("access_token");
       if(!accessToken){
@@ -84,15 +125,13 @@ export default function PostForm() {
           }
         });
       console.log("Success:", response);
-      requestData.title="";
-      requestData.tags=[];
-      requestData.website="";
-      requestData.location="";
-      requestData.since="";
-      requestData.image="";
-      requestData.body="";
+      setSuccessMessage("投稿に成功しました");
+      setSuccessSnackBarOpen(true);
+      handleClose();
     } catch (error) {
       console.error("Error:", error);
+      setErrorMessage("投稿に失敗しました");
+      setErrorSnackBarOpen(true);
     }
   };
 
@@ -103,18 +142,30 @@ export default function PostForm() {
       </IconButton>
       <Modal
         open={open}
-        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            新規投稿
-          </Typography>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                新規投稿
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container justifyContent="flex-end">
+                <Button size="small" variant ="outlined" onClick={handleClose}>
+                <CloseIcon/>
+               </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+          
           <Grid container spacing={1}>
             <Grid item xs={6}>
               <TextField
                 autoFocus
+                required
                 margin="normal"
                 id="title"
                 label="タイトル"
@@ -139,6 +190,7 @@ export default function PostForm() {
             <Grid item xs={6}>
               <TextField
                 autoFocus
+                required
                 margin="normal"
                 id="location"
                 label="位置情報"
@@ -176,6 +228,7 @@ export default function PostForm() {
 
           <TextField
             autoFocus
+            required
             margin="normal"
             id="body"
             label="本文"
@@ -205,10 +258,37 @@ export default function PostForm() {
               <Button variant="contained" onClick={handleImageRemove}>画像を取り消す</Button>
             </div>
           )}
-
-          <Button style={{ marginTop: '1rem' }} size="small" variant ="contained" onClick={newPost}>Post</Button>
+          <Grid container justifyContent="center">
+            <Grid item >
+              <Button style={{ marginTop: '1rem' }} size="small" type ="submit" variant ="contained" onClick={newPost}>
+                <SendIcon/>
+                </Button>
+            </Grid>
+          </Grid>       
         </Box>
       </Modal>
+      <Snackbar
+        open={errorSnackBarOpen}
+        autoHideDuration={3000}
+        onClose={handleErrorSnackBarClose}
+        >
+        
+        <Alert onClose={handleErrorSnackBarClose} severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+
+      </Snackbar>
+      <Snackbar
+        open={successSnackBarOpen}
+        autoHideDuration={3000}
+        onClose={handleSuccessSnackBarClose}
+        message = {successMessage}
+        >
+        
+        <Alert onClose={handleSuccessSnackBarClose} severity="success" sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
