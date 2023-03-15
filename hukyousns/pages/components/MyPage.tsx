@@ -196,7 +196,7 @@ const MyPage = () => {
       return;
     }
 
-    const res = [];
+    const res: JSX.Element[] = [];
     posts.forEach((post) => {
       res.push(create_card(post));
     });
