@@ -20,7 +20,7 @@ const Header = () => {
       <AppBar position="static" color="inherit">
         <Toolbar variant="dense">
           <Typography variant="h6" color="inherit" component="div">
-            hukyouSNS
+            PassionPulse
           </Typography>
           <IconButton
             edge="start"
