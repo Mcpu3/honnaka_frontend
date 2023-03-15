@@ -171,7 +171,13 @@ const MyPage = () => {
   }, [posts]);
 
   if (!myUser) {
-    return <div>Loading...</div>;
+    return (
+      <Typography
+        style={{ fontFamily: "Century", textShadow: "2px 2px 2px #888888" }}
+      >
+        <h1>Loading...</h1>
+      </Typography>
+    );
   }
 
   const create_card = (post: Post) => {
@@ -208,8 +214,16 @@ const MyPage = () => {
     <div>
       <Header />
       <div>
-        <h1>My page</h1>
-        <h2>username : {myUser.user_name}</h2>
+        <Typography
+          style={{ fontFamily: "Century", textShadow: "2px 2px 2px #888888" }}
+        >
+          <h1>My page</h1>
+        </Typography>
+        <Typography
+          style={{ fontFamily: "Century", textShadow: "2px 2px 2px #888888" }}
+        >
+          <h2>username : {myUser.user_name}</h2>
+        </Typography>
         <div>{create_cards()}</div>
       </div>
     </div>

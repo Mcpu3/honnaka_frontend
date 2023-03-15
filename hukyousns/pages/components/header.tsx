@@ -21,7 +21,12 @@ const Header = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="inherit">
         <Toolbar variant="dense">
-          <Typography variant="h6" color="inherit" component="div">
+          <Typography
+            variant="h6"
+            color="inherit"
+            component="div"
+            style={{ fontFamily: "Century", textShadow: "2px 2px 2px #888888" }}
+          >
             PassionPulse
           </Typography>
           <IconButton
