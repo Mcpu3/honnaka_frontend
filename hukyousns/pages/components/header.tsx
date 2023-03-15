@@ -33,7 +33,7 @@ const Header = () => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 1, ml: 1 }}
+            sx={{ mr: 1, ml: 1, ":hover": { backgroundColor: "grey" } }}
             onClick={() => handler("./MyPage")}
           >
             <HomeIcon />
@@ -42,7 +42,7 @@ const Header = () => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 1 }}
+            sx={{ mr: 1, ":hover": { backgroundColor: "grey" } }}
             onClick={() => handler("./home")}
           >
             <PublicIcon />
@@ -51,7 +51,7 @@ const Header = () => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 1 }}
+            sx={{ mr: 1, ":hover": { backgroundColor: "grey" } }}
             onClick={() => handler("./signin")}
           >
             <LoginIcon />
@@ -61,7 +61,7 @@ const Header = () => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 1 }}
+            sx={{ mr: 1, ":hover": { backgroundColor: "grey" } }}
             onClick={() => handler("./signup")}
           >
             <AddCircleOutlineIcon />
@@ -70,7 +70,7 @@ const Header = () => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 1 }}
+            sx={{ mr: 1, ":hover": { backgroundColor: "grey" } }}
             onClick={() => handler("./likes")}
           >
             <FavoriteIcon />
@@ -79,7 +79,7 @@ const Header = () => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 1 }}
+            sx={{ mr: 1, ":hover": { backgroundColor: "grey" } }}
             onClick={() => handler("./super_likes")}
           >
             <GradeIcon />
