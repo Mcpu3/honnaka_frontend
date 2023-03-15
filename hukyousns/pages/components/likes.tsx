@@ -133,7 +133,9 @@ const MyPage = () => {
 
       if (!ignore) {
         const data = await Promise.all(
-          postsUuid.liked_posts_uuid.map((liked_post_uuid) => fetchPost(liked_post_uuid))
+          postsUuid.liked_posts_uuid.map((liked_post_uuid) =>
+            fetchPost(liked_post_uuid)
+          )
         );
 
         setPosts(data);
@@ -209,7 +211,7 @@ const MyPage = () => {
     <div>
       <Header />
       <div>
-        <h1>My page</h1>
+        <h1>My likes</h1>
         <h2>username : {myUser.user_name}</h2>
         <div>{create_cards()}</div>
       </div>

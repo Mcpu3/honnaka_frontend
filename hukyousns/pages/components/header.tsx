@@ -9,6 +9,8 @@ import Router from "next/router";
 import HomeIcon from "@mui/icons-material/Home";
 import PublicIcon from "@mui/icons-material/Public";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import GradeIcon from "@mui/icons-material/Grade";
 
 const Header = () => {
   const handler = (path: string) => {
@@ -58,6 +60,24 @@ const Header = () => {
             onClick={() => handler("./signup")}
           >
             <AddCircleOutlineIcon />
+          </IconButton>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 1 }}
+            onClick={() => handler("./likes")}
+          >
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 1 }}
+            onClick={() => handler("./super_likes")}
+          >
+            <GradeIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
