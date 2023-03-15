@@ -255,7 +255,7 @@ export default function PostForm() {
           {base64Image && (
             <div>
               <h2>選択されたファイル</h2>
-              <img src={base64Image} alt="uploaded file" />
+              <img src={base64Image} alt="uploaded file" style={{ maxWidth:'100%',maxHeight:'300px'}}/>
               <Button variant="contained" onClick={handleImageRemove}>画像を取り消す</Button>
             </div>
           )}
