@@ -190,7 +190,7 @@ const MyPage = () => {
       >
         <CardContent>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {myUser.user_name}
+            Information
           </Typography>
           <Typography variant="h5">{post.title}</Typography>
           <Typography variant="body1">{post.summary}</Typography>
