@@ -87,10 +87,10 @@ const SignupAndLogin = () => {
         <Card sx={{ maxWidth: 450 }}>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              Hukyousns
+              PassionPulse
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Welcome to Hukyousns! Let&apos;s enjoy this sns !
+              Welcome to PassionPulse! Let&apos;s enjoy this SNS!
             </Typography>
             <Typography className="mt-1">UserName</Typography>
             <input
